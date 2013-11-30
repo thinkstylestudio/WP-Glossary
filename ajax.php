@@ -28,7 +28,7 @@ function wp_ajax_nopriv_wpg_get_term_details(){
 	if( $termob->post_status == 'private' && !current_user_can('read_private_posts') ):
 		wp_send_json_success( array('title'=>$title, 'content'=>'<p>'.__('Private glossary term',WPG_TEXTDOMAIN).'</p>') );
 	endif;
-		
+
 	// Don't display password protected items.
 	if( post_password_required($termid) ):
 		wp_send_json_success( array('title'=>$title, 'content'=>'<p>'.__('Protected glossary term',WPG_TEXTDOMAIN).'</p>') );
@@ -45,8 +45,17 @@ function wp_ajax_nopriv_wpg_get_term_details(){
 	endswitch;
 
 	// No content found, assume due to clash in settings and fetch full post content just in case.
-	if( empty($content) )
+	if( empty($content) ) {
 		$content = apply_filters( 'the_content', $term->post_content );
-			
-	wp_send_json_success( array('title'=>$title, 'content'=>$content) );
+    }
+
+    $reference = get_post_meta( $termid, 'tcbwpg_reference', $single=true );
+    if ($reference) {
+        $link = ' - <a href="' . $reference["link"] . '" >' . $reference["title"] . '</a>';
+
+    }
+
+
+
+    wp_send_json_success( array('title'=>$title, 'content'=>$content .  $link  ) );
 }

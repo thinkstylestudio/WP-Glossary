@@ -61,8 +61,8 @@ class WPG_Post_types Extends WPG{
 			'usage'     => __( 'Usage',     WPG_TEXTDOMAIN ),
 			'reference' => __( 'Reference', WPG_TEXTDOMAIN ),
 		);
-		$columns = array_slice( $columns, 0, -1, true ) 
-			+ $newcolumns 
+		$columns = array_slice( $columns, 0, -1, true )
+			+ $newcolumns
 			+ array_slice( $columns, -1, NULL, true );
 
 		return $columns;
@@ -96,7 +96,7 @@ class WPG_Post_types Extends WPG{
 				break;
 		endswitch;
 	}
-	
+
 	/** */
 	public function save_glossary_post( $post_id, $post ){
 		$slug = 'glossary';
@@ -126,7 +126,7 @@ class WPG_Post_types Extends WPG{
 			if( filter_var($link, FILTER_VALIDATE_URL) === FALSE )
 				$link = '';
 		endif;
-		
+
 		$reference = array( 'title'=>$title, 'link'=>$link );
 		update_post_meta( $post_id, 'tcbwpg_reference', $reference );
 		return $post_id;
@@ -149,7 +149,7 @@ class WPG_Post_types Extends WPG{
 					$content .= '<div class="glossary-references"><h4>' . __('Reference:', WPG_TEXTDOMAIN) . ' ' . $title . '</h4></div>';
 				endif;
 			endif; // $reference
-			
+
 			// Usage
 			$termusage = isset( $options['termusage'] ) ? $options['termusage'] : 'on';
 			if( $termusage == 'on' ):

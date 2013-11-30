@@ -43,11 +43,15 @@
 					solo:  true // Only show one tooltip at a time
 				},
 				//hide: 'unfocus',
-				hide: 'mouseleave',
-				style: { 
+                hide: {
+                    fixed: true,
+                    delay: 300
+                },
+				style: {
 					classes: 'qtip-'+qtipstyle+' qtip-shadow qtip-rounded'
 				}
 			})
 		});
 	});
 })(jQuery);
+
