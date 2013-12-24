@@ -38,7 +38,7 @@ class WPG_Shortcode_ATOZ Extends WPG{
 			'ignore_sticky_posts' => 1,
 			'post_status'         => $statii,
 		);
-	
+
 		// Restrict list to specific glossary group or groups
 		if( $group ):
 			$tax_query = array(
@@ -52,12 +52,12 @@ class WPG_Shortcode_ATOZ Extends WPG{
 		$list       = '<p>' . __('There are no glossary items.', WPG_TEXTDOMAIN) . '</p>';
 		$glossaries = get_posts( $args );
 		if( !count($glossaries) ) return $list;
-	
+
 		$atoz = array();
 		foreach( $glossaries as $post ) : setup_postdata( $post );
 			$title = get_the_title();
 			$alpha = strtolower( mb_substr($title, 0, 1, 'UTF-8') );
-	
+
 			$link  = '<span class="atoz-term-title">' . $title . '</span>'; // Default to text only
 			if( $linkopt != 'none' ):
 				$href   = apply_filters( 'wpg_term_link', get_post_permalink($post->ID) );
@@ -68,13 +68,23 @@ class WPG_Shortcode_ATOZ Extends WPG{
 				$content = ($desc=='excerpt') ? get_the_excerpt() : apply_filters('the_content', get_the_content());
 				$content = '<span class="glossary-item-desc">' . $content . '</span>';
 			endif;
+
+            $reference = get_post_meta( $post->ID, 'tcbwpg_reference', $single=true );
+
+            if ($reference) {
+
+                $reference_link = '<a href="' . $reference["link"] . '" >' . $reference["title"] . '</a>';
+
+            }
+
+
 			$item  = '<li class="glossary-item atoz-li atoz-li-' . $alpha . '">';
-			$item .= $link . '<br>' . $content;
+			$item .= $link . '<br>' . $content  . $reference_link;
 			$item .= '</li>';
-	
+
 			$atoz[$alpha][] = $item;
 		endforeach; wp_reset_postdata();
-	
+
 		// Menu
 		$menu  = '<ul class="glossary-menu-atoz">';
 		$range = apply_filters( 'wpg_atoz_range', array_keys($atoz) );
@@ -84,7 +94,7 @@ class WPG_Shortcode_ATOZ Extends WPG{
 			$menu .= '<a href="#' . $alpha . '">' . strtoupper($alpha) . '</a></li>';
 		endforeach;
 		$menu .= '</ul>';
-	
+
 		// Items
 		$list = '<div class="glossary-atoz-wrapper">';
 		foreach( $atoz as $alpha => $items ) :
@@ -93,7 +103,7 @@ class WPG_Shortcode_ATOZ Extends WPG{
 			$list .= '</ul>';
 		endforeach;
 		$list .= '</div>';
-	
+
 		$clear    = '<div style="clear: both;"></div>';
 		$plsclick = apply_filters( 'wpg_please_select', '<div class="wpg-please-select"><p>' . __('Please select from the menu above', WPG_TEXTDOMAIN) . '</p></div>' );
 		return '<div class="glossary-atoz-wrapper">' . $menu . $clear . $plsclick . $clear . $list . '</div>';

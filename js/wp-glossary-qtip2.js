@@ -14,6 +14,7 @@
 			$(this).qtip({
 				content: {
 					text: 'Loading glossary term',
+					
 					ajax: {
 						url     : WPG.admin_ajax,
 						type    : 'POST',
@@ -29,7 +30,10 @@
 							}
 						}
 					},
-					title: { text: 'Glossary Title' }
+					title: {
+						text: function(api) {return $(this).attr('title');},
+						button: '<span class="close">close</span>'
+					},
 				},
 				prerender: true,
 				position: {
@@ -42,11 +46,11 @@
 					event: WPG.qtiptrigger,
 					solo:  true // Only show one tooltip at a time
 				},
-				//hide: 'unfocus',
-                hide: {
-                    fixed: true,
-                    delay: 300
-                },
+				hide: 'unfocus',
+                // hide: {
+                //     fixed: true,
+                //     delay: 300
+                // },
 				style: {
 					classes: 'qtip-'+qtipstyle+' qtip-shadow qtip-rounded'
 				}

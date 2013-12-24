@@ -28,27 +28,20 @@ class WPG{
 		add_filter( 'wpg_term_link',         array(&$this, 'wpg_term_link')               );
 	}
 
-	static function base() {
-		return self::$base;
-	}
-	static function base_url() {
-		return self::$base_url;
-	}
-
-	public function localisation(){
-		load_plugin_textdomain( WPG_TEXTDOMAIN, false, WPG_TEXTDOMAIN . '/lang/' );
-	}
-
 	private function register_post_types(){
 		require_once( $this->base() . '/wpg-post-types.class.php' );
 		new WPG_Post_Types();
+	}
+
+	static function base() {
+		return self::$base;
 	}
 
 	public function register_taxonmies(){
 		require_once( $this->base() . '/wpg-taxonomies.class.php' );
 		new WPG_Taxonomies();
 	}
-	
+
 	private function add_shortcodes(){
 		require_once( $this->base() . '/wpg-shortcode-glossary.class.php' );
 		new WPG_Shortcodes();
@@ -61,6 +54,10 @@ class WPG{
 	private function add_widgets(){
 		require_once( $this->base() . '/wpg-widget-random-term.class.php' );
 		add_action( 'widgets_init', array($this, 'widgets_init') );
+	}
+
+	public function localisation(){
+		load_plugin_textdomain( WPG_TEXTDOMAIN, false, WPG_TEXTDOMAIN . '/lang/' );
 	}
 
 	public function widgets_init(){
@@ -84,6 +81,10 @@ class WPG{
 
  		wp_register_script( 'simple-ajax', $this->base_url() . '/js/simple-ajax-form.js', array('jquery-form') );
  		//wp_register_script( 'simple-ajax',     $this->base_url() . '/js/jquery-simple-ajax-form.js', array('jquery-form') );
+	}
+
+	static function base_url() {
+		return self::$base_url;
 	}
 
 	public function wp_footer(){
@@ -140,7 +141,7 @@ class WPG{
 		endif;
 	}
 
-	/** 
+	/**
 	 * Translation support
 	 */
 	public function wpg_term_link( $url ){
