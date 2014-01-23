@@ -51,11 +51,10 @@ function wp_ajax_nopriv_wpg_get_term_details(){
 
     $reference = get_post_meta( $termid, 'tcbwpg_reference', $single=true );
     if ($reference) {
-        $link = ' - <a href="' . $reference["link"] . '" >' . $reference["title"] . '</a>';
+        // Modified this so no link stays in the same window when shown in a qtip modal
+        $link = '<a target="_blank" href="' . $reference["link"] . '" >' . $reference["title"] . '</a>';
 
     }
-
-
 
     wp_send_json_success( array('title'=>$title, 'content'=>$content .  $link  ) );
 }
